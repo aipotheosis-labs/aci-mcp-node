@@ -31,3 +31,14 @@ npx tsx src/index.ts unified-server --linked-account-owner-id <linked-account-ow
   }
 }
 ```
+
+## Packing
+
+```bash
+npm install -g @anthropic-ai/dxt # install dxt
+npm install --production # install dependencies
+npm ci # reproducible builds
+dxt pack . aci-mcp-extension-v0.0.3.dxt # pack the extension
+```
+
+see: https://github.com/anthropics/dxt
