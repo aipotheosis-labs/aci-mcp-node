@@ -1,14 +1,14 @@
 import axios from 'axios';
 import { z } from 'zod';
-import { FunctionDefinitionFormat } from '../../common/enum.js';
-import { BaseTool } from './base.js';
+import { tool } from './registry.js';
+import { getConfig } from '../utils/config.js';
 
-export class AciSearchFunctionsTool extends BaseTool {
-  name = 'ACI_SEARCH_FUNCTIONS';
-  description = `
+export const aciSearchFunctionsTool = tool({
+  name: 'ACI_SEARCH_FUNCTIONS',
+  description: `
   This function allows you to find relevant executable functions and their schemas that can help complete your tasks.
-  `;
-  inputSchema = z.object({
+  `,
+  inputSchema: z.object({
     intent: z
       .string()
       .optional()
@@ -17,34 +17,22 @@ export class AciSearchFunctionsTool extends BaseTool {
       ),
     limit: z.number().optional().describe('The maximum number of functions to return from the search per response.'),
     offset: z.number().optional().describe('Pagination offset.'),
-  });
-
-  private readonly ALLOWED_APPS_ONLY: boolean;
-  private readonly FUNCTION_DEFINITION_FORMAT: string;
-
-  constructor(allowedAppsOnly: boolean, functionDefinitionFormat?: FunctionDefinitionFormat) {
-    super();
-    this.ALLOWED_APPS_ONLY = allowedAppsOnly;
-    this.FUNCTION_DEFINITION_FORMAT = functionDefinitionFormat || FunctionDefinitionFormat.ANTHROPIC;
-  }
-
-  async execute(args: z.infer<typeof this.inputSchema>): Promise<{
-    content: Array<{ type: 'text'; text: string }>;
-  }> {
+  }),
+  execute: async args => {
     try {
-      const url = `${this.ACI_SERVER_URL}functions/search`;
+      const config = getConfig();
+      const url = `${config.ACI_SERVER_URL}functions/search`;
 
-      // TODO: could these optional fields have null values instead of undefined? in which case it will be included in the query params
       const queryParams = {
-        intent: args.intent,
-        limit: args.limit,
-        offset: args.offset,
-        allowed_apps_only: this.ALLOWED_APPS_ONLY,
-        format: this.FUNCTION_DEFINITION_FORMAT,
+        intent: args?.intent,
+        limit: args?.limit,
+        offset: args?.offset,
+        allowed_apps_only: config.ALLOWED_APPS_ONLY,
+        format: config.FUNCTION_DEFINITION_FORMAT,
       };
 
       const headers = {
-        'X-API-KEY': this.ACI_API_KEY,
+        'X-API-KEY': config.ACI_API_KEY,
         'Content-Type': 'application/json',
       };
 
@@ -74,5 +62,5 @@ export class AciSearchFunctionsTool extends BaseTool {
       }
       throw error;
     }
-  }
-}
+  },
+});

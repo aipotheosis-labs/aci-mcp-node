@@ -1,44 +1,39 @@
 import axios from 'axios';
 import { z } from 'zod';
-import { BaseTool } from './base.js';
+import { tool } from './registry.js';
+import { getConfig } from '../utils/config.js';
 
-export class AciExecuteFunctionTool extends BaseTool {
-  name = 'ACI_EXECUTE_FUNCTION';
-  description = `
+export const aciExecuteFunctionTool = tool({
+  name: 'ACI_EXECUTE_FUNCTION',
+  description: `
   Execute a specific retrieved function. Provide the executable function name, and the 
   required function parameters for that function based on function definition retrieved.
-  `;
-  inputSchema = z.object({
+  `,
+  inputSchema: z.object({
     function_name: z.string().describe('The name of the function to execute.'),
     function_arguments: z
       .record(z.string(), z.any())
       .describe(
         'A dictionary containing key-value pairs of input parameters required by the function. specified function. The parameter names and types must match those defined in the function definition. previously retrieved. If the function requires no input parameters, this field should be an empty dictionary.'
       ),
-  });
+  }),
+  execute: async args => {
+    if (!args) {
+      throw new Error('Function name and arguments are required');
+    }
 
-  private readonly LINKED_ACCOUNT_OWNER_ID: string;
-
-  constructor(linkedAccountOwnerId: string) {
-    super();
-    this.LINKED_ACCOUNT_OWNER_ID = linkedAccountOwnerId;
-  }
-
-  async execute(args: z.infer<typeof this.inputSchema>): Promise<{
-    content: Array<{ type: 'text'; text: string }>;
-  }> {
     try {
-      const url = `${this.ACI_SERVER_URL}functions/${args.function_name}/execute`;
+      const config = getConfig();
+      const url = `${config.ACI_SERVER_URL}functions/${args.function_name}/execute`;
 
       const headers = {
-        'X-API-KEY': this.ACI_API_KEY,
+        'X-API-KEY': config.ACI_API_KEY,
         'Content-Type': 'application/json',
       };
 
-      // TODO: wrap_function_arguments_if_not_present?
       const body = {
         function_input: args.function_arguments,
-        linked_account_owner_id: this.LINKED_ACCOUNT_OWNER_ID,
+        linked_account_owner_id: config.LINKED_ACCOUNT_OWNER_ID,
       };
 
       const response = await axios.post(url, body, {
@@ -66,5 +61,5 @@ export class AciExecuteFunctionTool extends BaseTool {
       }
       throw error;
     }
-  }
-}
+  },
+});

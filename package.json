@@ -42,7 +42,7 @@
     "@modelcontextprotocol/sdk": "^1.13.2",
     "axios": "^1.7.7",
     "zod": "^3.25.67",
-    "commander": "^13.1.0"
+    "dotenv": "^16.4.5"
   },
   "devDependencies": {
     "@types/node": "^24.0.10",
