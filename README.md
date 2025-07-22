@@ -41,7 +41,7 @@ npm ci # reproducible builds
 npm run build # build the extension
 dxt pack . aci-unified-mcp-extension-v0.0.3.dxt # pack the extension
 # Create and use a self-signed certificate
-dxt sign aci-unified-mcp-extension-v0.0.1.dxt --self-signed
+dxt sign aci-unified-mcp-extension-v0.0.3.dxt --self-signed
 
 ```
 
