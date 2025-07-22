@@ -1,40 +1,35 @@
 #!/usr/bin/env node
 
-import { Command } from 'commander';
-import * as process from 'process';
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { aciExecuteFunctionTool } from './tools/aci-execute-function.js';
+import { aciSearchFunctionsTool } from './tools/aci-search-functions.js';
+import { registerTools } from './tools/tool.js';
+import { parseArgs } from './utils/args.js';
+import { initConfig } from './utils/config.js';
 
-interface UnifiedServerOptions {
-  linkedAccountOwnerId: string;
-  allowedAppsOnly: boolean;
+// Parse arguments
+const { allowedAppsOnly, linkedAccountOwnerId } = parseArgs();
+
+// Initialize config with parsed arguments
+initConfig({ allowedAppsOnly, linkedAccountOwnerId });
+
+const server = new McpServer({
+  name: 'aci-unified-mcp-server',
+  version: '1.0.0',
+});
+
+const tools = [aciSearchFunctionsTool, aciExecuteFunctionTool];
+registerTools(server, tools);
+
+async function startServer(): Promise<void> {
+  console.error('Starting server...');
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
+  console.error('Server started!');
 }
 
-const program = new Command();
-
-program.name('aci-mcp').description('ACI MCP servers, built by ACI.dev').version('0.0.1');
-
-/**
- * Unified MCP Server
- */
-program
-  .command('unified-server')
-  .description('Start the unified MCP server with unlimited tool access.')
-  .requiredOption('--linked-account-owner-id <id>', 'the owner id of the linked account to use for the tool calls')
-  .option(
-    '--allowed-apps-only',
-    'Optional flag, limit the functions (tools) search to only the allowed apps that are accessible to this agent. (identified by ACI_API_KEY)',
-    false
-  )
-  .action(async (options: UnifiedServerOptions) => {
-    try {
-      // Dynamic import and start the server
-      const { startServer } = await import('./unified-server/server.js');
-      await startServer(options.allowedAppsOnly, options.linkedAccountOwnerId);
-    } catch (error) {
-      console.error('Error starting unified server:', error);
-      process.exit(1);
-    }
-  });
-
-// TODO: apps-server
-
-program.parse();
+startServer().catch(error => {
+  console.error('Fatal error starting server:', error);
+  process.exit(1);
+});
