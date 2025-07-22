@@ -1,7 +1,7 @@
 {
   "dxt_version": "0.1",
-  "name": "aci-mcp-extension",
-  "display_name": "ACI Unified MCP Extension",
+  "name": "aci-unified-mcp-server",
+  "display_name": "ACI Unified MCP Server",
   "version": "0.0.3",
   "description": "Unified MCP server built with ACI.dev",
   "long_description": "ACI.dev is the open source tool-calling platform that hooks up 600+ tools into any agentic IDE or custom AI agent through direct function calling or a unified MCP server. The birthplace of VibeOps.",
@@ -33,11 +33,11 @@
   "tools": [
     {
       "name": "ACI_SEARCH_FUNCTIONS",
-      "description": "This function allows you to find relevant executable functions and their schemas that can help complete your tasks."
+      "description": "This function allows you to find relevant executable functions and their schemas that can help complete your tasks in the ACI.dev platform."
     },
     {
       "name": "ACI_EXECUTE_FUNCTION",
-      "description": "This function allows you to execute a function that is available in the ACI.dev platform."
+      "description": "This function allows you to execute a function that is available in the ACI.dev platform. You can use this function to execute a function that you selected from the ACI_SEARCH_FUNCTIONS function."
     }
   ],
   "compatibility": {
@@ -67,6 +67,6 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/aipotheosis-labs/aci-mcp"
+    "url": "https://github.com/aipotheosis-labs/aci-mcp-node"
   }
 }

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { z } from 'zod';
-import { tool } from './registry.js';
 import { getConfig } from '../utils/config.js';
+import { tool } from './tool.js';
 
 export const aciSearchFunctionsTool = tool({
   name: 'ACI_SEARCH_FUNCTIONS',

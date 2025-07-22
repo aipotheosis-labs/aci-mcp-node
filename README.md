@@ -39,9 +39,9 @@ npm install -g @anthropic-ai/dxt # install dxt
 npm install --production # install dependencies
 npm ci # reproducible builds
 npm run build # build the extension
-dxt pack . aci-mcp-extension-v0.0.3.dxt # pack the extension
+dxt pack . aci-unified-mcp-extension-v0.0.3.dxt # pack the extension
 # Create and use a self-signed certificate
-dxt sign aci-mcp-extension-v0.0.3.dxt --self-signed
+dxt sign aci-unified-mcp-extension-v0.0.1.dxt --self-signed
 
 ```
 

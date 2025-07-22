@@ -1,5 +1,5 @@
 {
-  "name": "@aci-sdk/mcp",
+  "name": "@aci-sdk/unified-mcp",
   "version": "0.0.1",
   "type": "module",
   "description": "MCP servers for ACI.dev",
@@ -41,11 +41,11 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.13.2",
     "axios": "^1.7.7",
-    "zod": "^3.25.67",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "zod": "^3.25.67"
   },
   "devDependencies": {
-    "@types/node": "^24.0.10",
+    "@types/node": "^24.1.0",
     "@typescript-eslint/eslint-plugin": "^8.35.1",
     "@typescript-eslint/parser": "^8.35.1",
     "eslint": "^8.45.0",

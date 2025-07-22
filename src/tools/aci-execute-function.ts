@@ -1,13 +1,12 @@
 import axios from 'axios';
 import { z } from 'zod';
-import { tool } from './registry.js';
 import { getConfig } from '../utils/config.js';
+import { tool } from './tool.js';
 
 export const aciExecuteFunctionTool = tool({
   name: 'ACI_EXECUTE_FUNCTION',
   description: `
-  Execute a specific retrieved function. Provide the executable function name, and the 
-  required function parameters for that function based on function definition retrieved.
+  Execute a specific retrieved function. Provide the executable function name, and the required function parameters for that function based on function definition retrieved.
   `,
   inputSchema: z.object({
     function_name: z.string().describe('The name of the function to execute.'),
